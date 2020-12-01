@@ -5,3 +5,6 @@ my_863_corpus/*
 log/
 checkpoint/
 data/
+.idea
+TIMIT
+.ctc

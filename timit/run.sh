@@ -9,7 +9,7 @@
 
 stage=0
 
-timit_dir=''
+timit_dir='../TIMIT'
 phoneme_map='60-39'
 feat_dir='data'                            #dir to save feature
 feat_type='fbank'                          #fbank, mfcc, spectrogram

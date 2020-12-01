@@ -79,7 +79,7 @@ class SpeechDataset(Dataset):
                 path_dict.append((utt, path))
                 line = rf.readline()
         
-       	#read the label
+        #read the label
         label_dict = dict()
         with open(self.lab_path, 'r') as rf:
             line = rf.readline()

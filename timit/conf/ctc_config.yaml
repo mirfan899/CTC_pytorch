@@ -42,10 +42,10 @@ activation_function: "relu"
 #[Training]
 use_gpu: True
 init_lr: 0.001
-num_epoches: 500
+num_epoches: 100
 end_adjust_acc: 2
 lr_decay: 0.5
-batch_size: 8
+batch_size: 32
 weight_decay: 0.0005
 seed: 1
 verbose_step: 50
@@ -53,8 +53,8 @@ verbose_step: 50
 #[test]
 test_scp_path: 'data/test/fbank.scp'
 test_lab_path: 'data/test/phn_text'
-decode_type: "Greedy"
-beam_width: 10
+decode_type: "Beam"
+beam_width: 50
 lm_alpha: 0.1
 lm_path: 'data/lm_phone_bg.arpa'
 

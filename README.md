@@ -106,3 +106,6 @@ Phoneme-level language model is inserted to beam search decoder now.
 - Beam search with RNN-LM  
 - The code in 863_corpus is a mess. Need arranged.
 
+## rename shitty timit directory structure
+find TIMIT -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
+find . -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
