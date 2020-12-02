@@ -1,14 +1,14 @@
 ## Update:
-Update to pytorch1.2 and python3.
+Works well with Pytorch 1.7 and Python 3.6
 
-# CTC-based Automatic Speech Recogniton
+# CTC-based Automatic Speech Recognition
 This is a CTC-based speech recognition system with pytorch.
 
 At present, the system only supports phoneme recognition.  
 
 You can also do it at word-level and may get a high error rate.
 
-Another way is to decode with a lexcion and word-level language model using WFST which is not included in this system.
+Another way is to decode with a lexicon and word-level language model using WFST which is not included in this system.
 
 ## Data
 English Corpus: Timit
@@ -62,10 +62,10 @@ pip install -r requirements.txt
 4. Open the config file to revise the super-parameters about everything.  
 5. Run the top script with four conditions
 ```bash
-bash run.sh    data_prepare + AM training + LM training + testing
-bash run.sh 1  AM training + LM training + testing
-bash run.sh 2  LM training + testing
-bash run.sh 3  testing
+bash run.sh    #data_prepare + AM training + LM training + testing
+bash run.sh 1  #AM training + LM training + testing
+bash run.sh 2  #LM training + testing
+bash run.sh 3  #testing
 ```
 RNN LM training is not implemented yet. They are added to the todo-list.  
 
@@ -89,7 +89,7 @@ RNN LM training is not implemented yet. They are added to the todo-list.
 
 Adjust the learning rate if the dev loss is around a specific loss for ten times.  
 Times of adjusting learning rate is 8 which can be alter in steps/train_ctc.py(line367).  
-Optimizer is nn.optimizer.Adam with weigth decay 0.005 
+Optimizer is nn.optimizer.Adam with weight decay 0.005 
 
 ## Decoder
 ### Greedy decoder:
@@ -98,7 +98,7 @@ Calculate the WER and CER by used the function of the class.
 ### Beam decoder:
 Implemented with python. [Original Code](https://github.com/githubharald/CTCDecoder)  
 I fix it to support phoneme for batch decode.    
-Beamsearch can improve about 0.2% of phonome accuracy.  
+Beamsearch can improve about 0.2% of phoneme accuracy.  
 Phoneme-level language model is inserted to beam search decoder now.  
 
 ## ToDo
@@ -106,6 +106,8 @@ Phoneme-level language model is inserted to beam search decoder now.
 - Beam search with RNN-LM  
 - The code in 863_corpus is a mess. Need arranged.
 
-## rename shitty timit directory structure
-find TIMIT -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
+## Rename TIMIT files
+Run this command in `TIMIT` directory. You may need to install `rename` package on Ubuntu.
+```shell script
 find . -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
+```
