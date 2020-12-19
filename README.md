@@ -1,6 +1,10 @@
 ## Update:
 Works well with Pytorch 1.7 and Python 3.6
 
+## Prediction
+For prediction of your own audios and transcripts, place them in Timit/predict directory. Then run the
+`run_pred.sh` script to get the results.
+
 # CTC-based Automatic Speech Recognition
 This is a CTC-based speech recognition system with pytorch.
 
@@ -106,8 +110,35 @@ Phoneme-level language model is inserted to beam search decoder now.
 - Beam search with RNN-LM  
 - The code in 863_corpus is a mess. Need arranged.
 
-## Rename TIMIT files
+## TIMIT preprocessing
 Run this command in `TIMIT` directory. You may need to install `rename` package on Ubuntu.
 ```shell script
 find . -depth -exec rename 's/(.*)\/([^\/]*)/$1\/\L$2/' {} \;
+```
+
+Change the timit NIST file to Riff wav
+```shell script
+find . -name '*.wav' -exec /home/irfan/kaldi/tools/sph2pipe_v2.5/sph2pipe -f wav {} {}.wav \;
+# now rename back to original file, be careful dont run it multiple times.
+find . -name '*.wav.wav' -exec rename -f 's/.wav.wav/.wav/' -- {} +
+```
+
+### Results
+timit dataset
+```shell script
+Character error rate on test set: 13.1404
+Word error rate on test set: 19.7505
+time used for decode 192 sentences: 1.3049 minutes.
+```
+
+timit+librispeech dev dataset
+```shell script
+Character error rate on test set: 11.7585
+Word error rate on test set: 17.5329
+time used for decode 192 sentences: 1.1056 minutes.
+```
+
+timit + librispeech dev and test dataset.
+```shell script
+# ongoing.
 ```
