@@ -131,7 +131,7 @@ Word error rate on test set: 19.7505
 time used for decode 192 sentences: 1.3049 minutes.
 ```
 
-timit+librispeech dev dataset
+timit + librispeech dev dataset
 ```shell script
 Character error rate on test set: 11.7585
 Word error rate on test set: 17.5329
