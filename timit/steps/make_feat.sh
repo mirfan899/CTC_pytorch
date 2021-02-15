@@ -22,7 +22,7 @@ else
     fi
 
     x=train
-    compute-$feat_type-feats --config=$feat_config scp,p:$data_dir/$x/wav_sph.scp \
+    compute-$feat_type-feats --config=$feat_config scp,p:$data_dir/$x/wav.scp \
                         ark,scp:$data_dir/$x/raw_$feat_type.ark,$data_dir/$x/raw_$feat_type.scp 
     #compute mean and variance with all training samples
     compute-cmvn-stats --binary=false scp:$data_dir/$x/raw_$feat_type.scp $data_dir/global_${feat_type}_cmvn.txt
@@ -32,7 +32,7 @@ else
     rm -f $data_dir/$x/raw_$feat_type.ark $data_dir/$x/raw_$feat_type.scp
 
 	for x in dev test; do
-        compute-$feat_type-feats --config=$feat_config scp,p:$data_dir/$x/wav_sph.scp ark:- | \
+        compute-$feat_type-feats --config=$feat_config scp,p:$data_dir/$x/wav.scp ark:- | \
             apply-cmvn --norm-vars=true $data_dir/global_${feat_type}_cmvn.txt ark:- ark:- |\
                 copy-feats --compress=$compress ark:- ark,scp:$data_dir/$x/$feat_type.ark,$data_dir/$x/$feat_type.scp
     done

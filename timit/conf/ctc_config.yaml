@@ -41,7 +41,7 @@ activation_function: "relu"
 
 #[Training]
 use_gpu: True
-init_lr: 0.001
+init_lr: 0.0005
 num_epoches: 100
 end_adjust_acc: 2
 lr_decay: 0.5

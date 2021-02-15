@@ -25,6 +25,7 @@ def get_phonemes_only(sentence):
     phonemes_only_cleaned = []
     for ph in phonemes_only:
         p = ph.translate(str.maketrans('', '', digits))
+        p = p.replace("AO", "AA")
         phonemes_only_cleaned.append(p)
 
     return phonemes_only_cleaned
