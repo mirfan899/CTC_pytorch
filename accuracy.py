@@ -2,10 +2,10 @@ import editdistance
 from utils import get_phonemes_only, clean, get_score, get_cosine, text_to_vector
 import string
 
-text = "go do you hear"
+text = open("output/words.txt").readlines()[0]
 text = text.translate(str.maketrans("", "", string.punctuation))
 
-predicted = "g ow sil iy uw y ih er"
+predicted = open("output/predicted.txt").readlines()[0]
 original = " ".join(get_phonemes_only(text)).lower()
 print(original)
 text = clean(text)

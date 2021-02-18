@@ -74,6 +74,7 @@ def test():
     with torch.no_grad():
         for data in test_loader:
             inputs, input_sizes, targets, target_sizes, utt_list = data
+            os.system("cp ../TIMIT/predict/{}.txt ../output/words.txt".format(utt_list[0]))
             inputs = inputs.to(device)
             # rnput_sizes = input_sizes.to(device)
             # target = target.to(device)
@@ -94,6 +95,10 @@ def test():
                 labels.append(' '.join(label))
 
             for x in range(len(targets)):
+                with open("../output/original.txt", "w") as writer:
+                    writer.write(labels[x])
+                with open("../output/predicted.txt", "w") as writer:
+                    writer.write(decoded[x])
                 print("origin : " + labels[x])
                 print("decoded: " + decoded[x])
             cer = 0

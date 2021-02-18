@@ -10,7 +10,7 @@ WORD = re.compile(r"\w+")
 def clean(sentence=None):
     cleaned = sentence.replace("sil", "")
     cleaned = re.sub(" +", " ", cleaned)
-    return cleaned
+    return cleaned.strip()
 
 
 def get_score(phoneme, distance):
