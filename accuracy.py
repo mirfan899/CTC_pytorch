@@ -1,9 +1,9 @@
 import editdistance
-from utils import get_phonemes_only, clean, get_score
+from utils import get_phonemes_only, clean, get_score, get_cosine, text_to_vector
 import string
 
 text = "go do you hear"
-text = text.translate(str.maketrans('', '', string.punctuation))
+text = text.translate(str.maketrans("", "", string.punctuation))
 
 predicted = "g ow sil iy uw y ih er"
 original = " ".join(get_phonemes_only(text)).lower()
@@ -16,13 +16,13 @@ for word in text.split():
     phonemes = get_phonemes_only(word)[0].lower()
     ph_size = len(phonemes)
     predicted_phonemes = predicted[:ph_size].strip()
-    print("Word level phoneme Accuracy")
-    wd = editdistance.eval(phonemes, predicted_phonemes)
-    # print((wd/len(phonemes))*100)
+    # print("Word level phoneme Accuracy")
+    # wd = editdistance.eval(phonemes, predicted_phonemes)
     if len(phonemes.split()) == len(predicted_phonemes.split()):
         for index, p in enumerate(phonemes.split()):
             pd = editdistance.eval(p, predicted_phonemes.split()[index])
             score = get_score(p, pd)
+            # score = get_cosine(text_to_vector(p), text_to_vector(predicted_phonemes.split()[index]))
             result[p] = score
     else:
         predicted_phonemes_ = predicted_phonemes.split()
@@ -32,10 +32,12 @@ for word in text.split():
             if index < size:
                 pd = editdistance.eval(p, predicted_phonemes_[index])
                 score = get_score(p, pd)
+                # score = get_cosine(text_to_vector(p), text_to_vector(predicted_phonemes_[index]))
                 result[p] = score
             else:
                 pd = len(p)
                 score = get_score(p, pd)
+                # score = get_cosine(text_to_vector(p), text_to_vector(p))
                 result[p] = score
     predicted = predicted[ph_size:]
 # original = " ".join(get_phonemes_only(text)).lower()
