@@ -142,3 +142,17 @@ timit + librispeech dev and test dataset.
 ```shell script
 # ongoing.
 ```
+
+Convert mp3 to required format
+```shell
+ffmpeg -i dog_3_r2.mp3 -acodec pcm_s16le -ac 1 -ar 16000 dog_3_r2.wav
+```
+
+```shell
+for i in ./*.mp3; do
+  filename=$(basename -- "${i}")
+  extension="${filename##*.}"
+  name="${filename%.*}"
+  ffmpeg -i "$i" -acodec pcm_s16le -ac 1 -ar 16000 "${name}.wav"
+done
+```
