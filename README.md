@@ -156,3 +156,11 @@ for i in ./*.mp3; do
   ffmpeg -i "$i" -acodec pcm_s16le -ac 1 -ar 16000 "${name}.wav"
 done
 ```
+
+Use CMU stress mark for CTC for all the data
+and use aligner for get the phonemes accuracy.
+
+```shell
+curl -X POST -F paragraph="When did you come back from your summer camp Lingling I came back last Thursday What did you do there I climbed the mountains and I swam in the river I went fishing one day and caught three fish Really I let them go back into the river again Good for you Was the camp very far No It took only two hours by bus  So you had a lot of fun at the camp Yes I did" -F file=@'test.wav' http://127.0.0.1:5000/api/accuracy
+curl -X POST -F paragraph="cheerful hardworking outgoing keen who whose favourite place sport advice to others exhilarated excited frightened interesting excited favourite sport Super Samson Simpson dozen a cold runny nose no energy" -F file=@'1.wav' http://127.0.0.1:5000/api/accuracy
+```

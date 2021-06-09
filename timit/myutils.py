@@ -1,10 +1,37 @@
+import json
 from string import digits
 from constants import DICTIONARY
 import math
 import re
 from collections import Counter
+import os
+import subprocess
+import uuid
+
 
 WORD = re.compile(r"\w+")
+
+
+def get_predicted_phonemes():
+    phs = open("output/predicted.txt").readlines()
+    return phs[0]
+
+
+def generate_predicted_phonemes():
+    """just run the command run_pred.sh to generate the prediction file in output.
+    First clean the output and predict directory
+    """
+
+    cmd = "cd ./timit/ && run_pred.sh"
+    # os.system("cd ./timit/ && pwd")
+
+
+    print("Running Phoneme process================================================")
+    # process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    # process.wait()
+    os.system("./run_pred.sh")
+
+    return {"success": 200}
 
 
 def clean(sentence=None):
@@ -50,6 +77,15 @@ def get_cosine(vec1, vec2):
         return float(numerator) / denominator
 
 
-def text_to_vector(text):
+def text_to_vector(text=None):
     words = WORD.findall(text)
     return Counter(words)
+
+
+def save_paragraph(text=None, filename=None):
+    if text and filename:
+        with open("TIMIT/predict/{}.txt".format(filename), "w") as writer:
+            writer.write(text)
+        return {"Message": 200, "text": text}
+    else:
+        return {"Text or filename missing": 400}

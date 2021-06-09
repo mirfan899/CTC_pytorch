@@ -1,7 +1,10 @@
 import json
+import os
 
 librispeech = open("librispeech-lexicon.json", "r")
 DICTIONARY = json.load(librispeech)
+
+# ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) # This is your Project Root
 
 MAP_DICTIONARY = {
     "aa": "aa", "ao": "aa",
