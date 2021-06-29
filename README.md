@@ -164,3 +164,17 @@ and use aligner for get the phonemes accuracy.
 curl -X POST -F paragraph="When did you come back from your summer camp Lingling I came back last Thursday What did you do there I climbed the mountains and I swam in the river I went fishing one day and caught three fish Really I let them go back into the river again Good for you Was the camp very far No It took only two hours by bus  So you had a lot of fun at the camp Yes I did" -F file=@'test.wav' http://127.0.0.1:5000/api/accuracy
 curl -X POST -F paragraph="cheerful hardworking outgoing keen who whose favourite place sport advice to others exhilarated excited frightened interesting excited favourite sport Super Samson Simpson dozen a cold runny nose no energy" -F file=@'1.wav' http://127.0.0.1:5000/api/accuracy
 ```
+
+## Necessary Packages for Aligner
+```shell script
+sudo apt-get install libatlas3-base
+sudo apt install libopenblas-dev
+```
+
+## Remove object file causing issues on Ubuntu 18
+```shell script
+rm -rf ./lib/thirdparty/bin/libopenblas.so.0
+```
+## Another issue
+
+cp lib/libpython3.6m.so.1.0 lib/libpython3.6m.so

@@ -7,7 +7,8 @@ from collections import Counter
 import os
 import subprocess
 import uuid
-
+from pydub import AudioSegment
+from praatio.tgio import openTextgrid
 
 WORD = re.compile(r"\w+")
 
@@ -84,8 +85,33 @@ def text_to_vector(text=None):
 
 def save_paragraph(text=None, filename=None):
     if text and filename:
-        with open("TIMIT/predict/{}.txt".format(filename), "w") as writer:
+        # with open("TIMIT/predict/{}.txt".format(filename), "w") as writer:
+        with open("montreal-forced-aligner/data/{}.txt".format(filename), "w") as writer:
             writer.write(text)
         return {"Message": 200, "text": text}
     else:
         return {"Text or filename missing": 400}
+
+
+def generate_word_level_audios(name=None):
+    """
+    split audio to words using textgrid file and save it in timit predict directory.
+    """
+    audio = AudioSegment.from_wav("montreal-forced-aligner/data/{}.wav".format(name))
+    tg = openTextgrid("montreal-forced-aligner/textgrids/data/{}.TextGrid".format(name), readAsJson=False)
+
+    for index, entry in enumerate(tg.tierDict["words"].entryList):
+        word = str(index) + "_" + entry.label
+        # time in seconds
+        start = entry.start * 1000
+        end = entry.end * 1000
+
+        chunk = audio[start:end]
+        sound = chunk.set_frame_rate(16000).set_channels(1)
+        silence = AudioSegment.silent(200)
+        total = sound + silence
+        total.export("TIMIT/predict/{}.wav".format(word), format="wav")
+        with open("TIMIT/predict/{}.txt".format(word), "w") as writer:
+            writer.write(entry.label)
+
+    return {"message": 200}

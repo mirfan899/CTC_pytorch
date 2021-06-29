@@ -21,7 +21,7 @@ feature_type: "fbank"
 
 #Model
 rnn_input_size: 243
-rnn_hidden_size: 384
+rnn_hidden_size: 512
 rnn_layers: 4
 rnn_type: "nn.LSTM"
 bidirectional: True

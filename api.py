@@ -6,8 +6,11 @@ from flask_restful import Resource, Api, reqparse
 from werkzeug.utils import secure_filename
 from accuracy import PhonemeAccuracy
 
-from timit.myutils import generate_predicted_phonemes, save_paragraph, get_predicted_phonemes
-UPLOAD_FOLDER = 'TIMIT/predict/'
+from timit.myutils import generate_predicted_phonemes, save_paragraph, get_predicted_phonemes, \
+    generate_word_level_audios
+
+# UPLOAD_FOLDER = 'TIMIT/predict/'
+UPLOAD_FOLDER = 'montreal-forced-aligner/data/'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -42,7 +45,8 @@ class Accuracy(Resource):
         name = os.path.splitext(filename)[0]
         result = {}
         if extension in ALLOWED_FILES:
-            os.system("rm TIMIT/predict/*")
+            # os.system("rm TIMIT/predict/*")
+            os.system("rm montreal-forced-aligner/data/*")
             if extension in [".mp3"]:
                 mp3 = name + "{}".format(extension)
                 wav = name + ".wav"
@@ -59,15 +63,18 @@ class Accuracy(Resource):
             save_paragraph(paragraph, name)
             # run shell script using this function and get the message.
 
-            os.system("./predict.sh")
 
+            os.system("montreal-forced-aligner/bin/mfa_align montreal-forced-aligner/data/ montreal-forced-aligner/dict/librispeech-lexicon.txt montreal-forced-aligner/pretrained_models/english.zip montreal-forced-aligner/textgrids/")
             result = {}
-            predicted_phonemes = get_predicted_phonemes()
-
-            paragraph_accuracy = PhonemeAccuracy(original=paragraph, predicted=predicted_phonemes).accuracy()
-            response["phonemes_accuracy"] = paragraph_accuracy
+            message = generate_word_level_audios(name)
+            # run phoneme prediction model
+            os.system("./predict.sh")
+            # predicted_phonemes = get_predicted_phonemes()
+            #
+            # paragraph_accuracy = PhonemeAccuracy(original=paragraph, predicted=predicted_phonemes).accuracy()
+            # response["phonemes_accuracy"] = paragraph_accuracy
             response["status"] = 200
-            response["result"] = result
+            # response["result"] = result
         else:
             response["message"] = 'upload a .wav or .mp3 file'
             response["status"] = 404

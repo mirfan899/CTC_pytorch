@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#此文件用来得到训练集，验证集和测试集的音频路径文件和转录文本即标签文件以便后续处理
-#输入的参数时TIMIT数据库的路径。
-#更换数据集之后，因为数据的目录结构不一致，需要对此脚本进行简单的修改。
+#This file is used to get the audio path files of the training set, validation set and test set, and the transcription text that is the label file for subsequent processing
+#The input parameter is the path of the TIMIT database.
+#After replacing the data set, because the data directory structure is inconsistent, this script needs to be modified simply.
 
 if [ $# -ne 2 ]; then
    echo "Need directory of TIMIT dataset !"
