@@ -4,6 +4,9 @@
 #2017.11.1     Training acoustic model and decode with phoneme-level bigram
 #2018.4.30     Replace the h5py with ark and simplify the data_loader.py
 #2019.12.20    Update to pytorch1.2 and python3.7
+cat /dev/null > ../output/original.txt
+cat /dev/null > ../output/predicted.txt
+cat /dev/null > ../output/words.txt
 
 . path.sh
 

@@ -1,13 +1,12 @@
 import os
+import re
 import string
 import werkzeug
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from werkzeug.utils import secure_filename
-from accuracy import PhonemeAccuracy
-
-from timit.myutils import generate_predicted_phonemes, save_paragraph, get_predicted_phonemes, \
-    generate_word_level_audios
+from timit.myutils import save_paragraph, get_predicted_phonemes, \
+    generate_word_level_audios, get_original_phonemes, get_words
 
 # UPLOAD_FOLDER = 'TIMIT/predict/'
 UPLOAD_FOLDER = 'montreal-forced-aligner/data/'
@@ -63,18 +62,50 @@ class Accuracy(Resource):
             save_paragraph(paragraph, name)
             # run shell script using this function and get the message.
 
-
             os.system("montreal-forced-aligner/bin/mfa_align montreal-forced-aligner/data/ montreal-forced-aligner/dict/librispeech-lexicon.txt montreal-forced-aligner/pretrained_models/english.zip montreal-forced-aligner/textgrids/")
             result = {}
             message = generate_word_level_audios(name)
             # run phoneme prediction model
             os.system("./predict.sh")
-            # predicted_phonemes = get_predicted_phonemes()
-            #
-            # paragraph_accuracy = PhonemeAccuracy(original=paragraph, predicted=predicted_phonemes).accuracy()
-            # response["phonemes_accuracy"] = paragraph_accuracy
+            predicted_phonemes = get_predicted_phonemes()
+            original_phonemes = get_original_phonemes()
+            words = get_words()
+
+            for index, word in enumerate(words):
+                word_score = {}
+                phoneme_score = {}
+                if original_phonemes[index] == predicted_phonemes[index]:
+                    for ph in original_phonemes[index].split():
+                        phoneme_score[ph] = 100
+                    word_score["phoneme_accuracy"] = phoneme_score
+                    word_score["word_accuracy"] = 100
+                else:
+                    # find predicted phoneme from original by matching the indexes and score it 100 else 20 for now.
+                    pp = predicted_phonemes[index].split()
+                    op = original_phonemes[index]
+                    for p in pp:
+                        grp = re.search(p, op)
+                        if grp:
+                            if predicted_phonemes[index][grp.start(): grp.end()] == original_phonemes[index][grp.start(): grp.end()]:
+                                phoneme_score[p] = 100
+                            else:
+                                phoneme_score[p] = 20
+                        else:
+                            phoneme_score[p] = 0
+                    if phoneme_score:
+                        word_score["phoneme_accuracy"] = phoneme_score
+                        word_score["word_accuracy"] = round(
+                            sum(phoneme_score.values()) / (len(phoneme_score.values()) * 100), 2)
+                    else:
+                        word_score["word_accuracy"] = 0
+                        for ph in original_phonemes[index].split():
+                            phoneme_score[ph] = 0
+                        word_score["phoneme_accuracy"] = phoneme_score
+                word_score["word"] = word
+                result[str(index)] = word_score
+
             response["status"] = 200
-            # response["result"] = result
+            response["result"] = result
         else:
             response["message"] = 'upload a .wav or .mp3 file'
             response["status"] = 404

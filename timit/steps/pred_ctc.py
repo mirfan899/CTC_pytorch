@@ -95,10 +95,10 @@ def test():
                 labels.append(' '.join(label))
 
             for x in range(len(targets)):
-                with open("../output/original.txt", "w") as writer:
-                    writer.write(labels[x])
-                with open("../output/predicted.txt", "w") as writer:
-                    writer.write(decoded[x])
+                with open("../output/original.txt", "a") as writer:
+                    writer.write(labels[x]+"\n")
+                with open("../output/predicted.txt", "a") as writer:
+                    writer.write(decoded[x]+"\n")
                 print("origin : " + labels[x])
                 print("decoded: " + decoded[x])
             cer = 0

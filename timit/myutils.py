@@ -15,7 +15,23 @@ WORD = re.compile(r"\w+")
 
 def get_predicted_phonemes():
     phs = open("output/predicted.txt").readlines()
-    return phs[0]
+    phs = [ph.replace("sil", "").strip() for ph in phs]
+    return phs
+
+
+def get_original_phonemes():
+    phs = open("output/original.txt").readlines()
+    phs = [ph.replace("sil", "").strip() for ph in phs]
+    return phs
+
+
+def get_words():
+    lines = open("timit/data/predict/phn_text").readlines()
+    lines = ["".join(line.split(" ")[:1]) for line in lines]
+    words = []
+    for line in lines:
+        words.append("".join(line.split("_")[1:]))
+    return words
 
 
 def generate_predicted_phonemes():
@@ -99,7 +115,8 @@ def generate_word_level_audios(name=None):
     """
     audio = AudioSegment.from_wav("montreal-forced-aligner/data/{}.wav".format(name))
     tg = openTextgrid("montreal-forced-aligner/textgrids/data/{}.TextGrid".format(name), readAsJson=False)
-
+    # clean predict directory first
+    os.system("rm TIMIT/predict/*.*")
     for index, entry in enumerate(tg.tierDict["words"].entryList):
         word = str(index) + "_" + entry.label
         # time in seconds
