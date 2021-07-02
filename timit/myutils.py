@@ -1,12 +1,9 @@
-import json
 from string import digits
 from constants import DICTIONARY
 import math
 import re
 from collections import Counter
 import os
-import subprocess
-import uuid
 from pydub import AudioSegment
 from praatio.tgio import openTextgrid
 
@@ -25,8 +22,21 @@ def get_original_phonemes():
     return phs
 
 
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+
+def natural_keys(text):
+    """
+    Human sorting
+    """
+    return [atoi(c) for c in re.split(r'(\d+)', text)]
+
+
 def get_words():
     lines = open("timit/data/predict/phn_text").readlines()
+    # human sorting
+    lines.sort(key=natural_keys)
     lines = ["".join(line.split(" ")[:1]) for line in lines]
     words = []
     for line in lines:
