@@ -30,7 +30,7 @@ def test():
     opts = Config()
     for k, v in conf.items():
         setattr(opts, k, v)
-        print('{:50}:{}'.format(k, v))
+        # print('{:50}:{}'.format(k, v))
 
     use_cuda = opts.use_gpu
     device = torch.device('cuda') if use_cuda else torch.device('cpu')
@@ -68,13 +68,13 @@ def test():
         decoder = BeamDecoder(vocab.index2word, beam_width=beam_width, blank_index=0, space_idx=-1,
                               lm_path=opts.lm_path, lm_alpha=opts.lm_alpha)
 
-    total_wer = 0
-    total_cer = 0
-    start = time.time()
+    # total_wer = 0
+    # total_cer = 0
+    # start = time.time()
     with torch.no_grad():
         for data in test_loader:
             inputs, input_sizes, targets, target_sizes, utt_list = data
-            os.system("cp ../TIMIT/predict/{}.txt ../output/words.txt".format(utt_list[0]))
+            # os.system("cp ../TIMIT/predict/{}.txt ../output/words.txt".format(utt_list[0]))
             inputs = inputs.to(device)
             # rnput_sizes = input_sizes.to(device)
             # target = target.to(device)
@@ -96,27 +96,28 @@ def test():
 
             for x in range(len(targets)):
                 with open("../output/original.txt", "a") as writer:
-                    writer.write(labels[x]+"\n")
+                    writer.write(utt_list[x] + " " +labels[x]+"\n")
                 with open("../output/predicted.txt", "a") as writer:
-                    writer.write(decoded[x]+"\n")
-                print("origin : " + labels[x])
-                print("decoded: " + decoded[x])
-            cer = 0
-            wer = 0
-            for x in range(len(labels)):
-                cer += decoder.cer(decoded[x], labels[x])
-                wer += decoder.wer(decoded[x], labels[x])
-                decoder.num_word += len(labels[x].split())
-                decoder.num_char += len(labels[x])
-            total_cer += cer
-            total_wer += wer
-    CER = (float(total_cer) / decoder.num_char) * 100
-    WER = (float(total_wer) / decoder.num_word) * 100
-    print("Character error rate on test set: %.4f" % CER)
-    print("Word error rate on test set: %.4f" % WER)
-    end = time.time()
-    time_used = (end - start) / 60.0
-    print("time used for decode %d sentences: %.4f minutes." % (len(test_dataset), time_used))
+                    writer.write(utt_list[x] + " " +decoded[x]+"\n")
+
+                # print("origin : " + labels[x])
+                # print("decoded: " + decoded[x])
+            # cer = 0
+            # wer = 0
+            # for x in range(len(labels)):
+            #     cer += decoder.cer(decoded[x], labels[x])
+            #     wer += decoder.wer(decoded[x], labels[x])
+            #     decoder.num_word += len(labels[x].split())
+            #     decoder.num_char += len(labels[x])
+            # total_cer += cer
+            # total_wer += wer
+    # CER = (float(total_cer) / decoder.num_char) * 100
+    # WER = (float(total_wer) / decoder.num_word) * 100
+    # print("Character error rate on test set: %.4f" % CER)
+    # print("Word error rate on test set: %.4f" % WER)
+    # end = time.time()
+    # time_used = (end - start) / 60.0
+    # print("time used for decode %d sentences: %.4f minutes." % (len(test_dataset), time_used))
 
 
 if __name__ == "__main__":

@@ -11,13 +11,17 @@ WORD = re.compile(r"\w+")
 
 
 def get_predicted_phonemes():
-    phs = open("output/predicted.txt").readlines()
+    lines = open("output/predicted.txt").readlines()
+    lines.sort(key=natural_keys)
+    phs = [" ".join(line.split(" ")[1:]) for line in lines]
     phs = [ph.replace("sil", "").strip() for ph in phs]
     return phs
 
 
 def get_original_phonemes():
-    phs = open("output/original.txt").readlines()
+    lines = open("output/original.txt").readlines()
+    lines.sort(key=natural_keys)
+    phs = [" ".join(line.split(" ")[1:]) for line in lines]
     phs = [ph.replace("sil", "").strip() for ph in phs]
     return phs
 
@@ -112,6 +116,7 @@ def text_to_vector(text=None):
 def save_paragraph(text=None, filename=None):
     if text and filename:
         # with open("TIMIT/predict/{}.txt".format(filename), "w") as writer:
+        text = text.replace("-", " ")
         with open("montreal-forced-aligner/data/{}.txt".format(filename), "w") as writer:
             writer.write(text)
         return {"Message": 200, "text": text}

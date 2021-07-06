@@ -38,7 +38,8 @@ class Accuracy(Resource):
             }
         file = data['file']
         # clean string
-        paragraph = data['paragraph'].translate(str.maketrans('', '', string.punctuation))
+        # handle compound words which has hyphen see save_paragraph
+        paragraph = data['paragraph'].translate(str.maketrans('', '', r"""!"#$%&'()*+,./:;<=>?@[\]^_`{|}~"""))
         filename = secure_filename(file.filename)
         extension = os.path.splitext(filename)[1]
         name = os.path.splitext(filename)[0]

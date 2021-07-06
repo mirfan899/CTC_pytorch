@@ -163,6 +163,7 @@ and use aligner for get the phonemes accuracy.
 ```shell
 curl -X POST -F paragraph="When did you come back from your summer camp Lingling I came back last Thursday What did you do there I climbed the mountains and I swam in the river I went fishing one day and caught three fish Really I let them go back into the river again Good for you Was the camp very far No It took only two hours by bus  So you had a lot of fun at the camp Yes I did" -F file=@'test.wav' http://127.0.0.1:5000/api/accuracy
 curl -X POST -F paragraph="cheerful hardworking outgoing keen who whose favourite place sport advice to others exhilarated excited frightened interesting excited favourite sport Super Samson Simpson dozen a cold runny nose no energy" -F file=@'1.wav' http://127.0.0.1:5000/api/accuracy
+curl -X POST -F paragraph="Every dog is a mammal. All mammals have hair on their bodies. People, horses, and elephants are also mammals. Hair protects a mammals skin. The hair keeps skin from getting scraped. Hair also protects mammals from cold and heat. What else makes an animal a mammal? Here are some examples. Every mammal has a backbone. That bone is also called the spine. Mammals are warm-blooded. That means the temperature in their bodies is warm and usually stays the same. Female mammals make milk in their bodies. They feed the milk to their babies." -F file=@'test/output.wav' https://focusmore.ngrok.io/api/accuracy
 ```
 
 ## Necessary Packages for Aligner
@@ -176,5 +177,5 @@ sudo apt install libopenblas-dev
 rm -rf ./lib/thirdparty/bin/libopenblas.so.0
 ```
 ## Another issue
-
+go to montreal force aligner directory and do following
 cp lib/libpython3.6m.so.1.0 lib/libpython3.6m.so
